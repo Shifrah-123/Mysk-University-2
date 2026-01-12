@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mysk University Website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <section class="sub-header">
+        <nav>
+           <a href="index.html"><img src="C:\Users\user\Desktop\SCHOOL WEBSITE\Images\Mysk-Logo.png" ></a>
+           <div class="nav-links" id="navLinks">
+            <i class="fa fa-times" aria-hidden="true" onclick="hideMenu()"></i>
+               <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="About.html">ABOUT</a></li>
+                <li><a href="Course.html">COURSE</a></li>
+                <li><a href="Blog.html">BLOG</a></li>
+                <li><a href="Admissions.html">ADMISSION</a></li>
+               </ul>
+           </div>
+           <i class="fa fa-bars" aria-hidden="true" onclick="showMenu()"></i>
+        </nav>
+         <h1>About Us</h1>
+     </section>
+
+     <!-------about us content----->
+     <section class="about-us">
+        <div class="row">
+            <div class="about-col">
+                <h1>We are one of the best universities in Uganda</h1>
+                <p>Mysk University is a modern institution dedicated to providing 
+                    quality education and innovative research opportunities. We 
+                    aim to equip students with the knowledge and skills needed 
+                    to excel in a dynamic world. With a diverse community, 
+                    experienced faculty, and state-of-the-art facilities, 
+                    we are committed to academic excellence, personal growth, 
+                    and global impact.</p>
+                    <a href="Explore.html" class="hero-btn red-btn">EXPLORE NOW</a>
+            </div>
+            <div class="about-col">
+                <img src="Images\grad 2.avif">
+            </div>
+        </div>
+     </section>
+
+      <!-------Footer----->
+      <section class="footer">
+        <h4>About Us</h4>
+        <p>Mysk University is dedicated to excellence in education, research, and innovation. <br>We provide a supportive learning environment that prepares students for global success.</p>
+        <div class="icons">
+            <i class="fa fa-facebook"></i>
+            <i class="fa fa-twitter"></i>
+            <i class="fa fa-instagram"></i>
+            <i class="fa fa-linkedin"></i>
+        </div>
+      </section>
+
+     <!-------JavaScript for toogle menu------>
+     <script>
+        var navLinks = document.getElementById("navLinks");
+        function showMenu(){
+            navLinks.style.right = "0";
+        }
+        function hideMenu(){
+            navLinks.style.right = "-200px";
+        }
+     </script>
+</body>
+</html>
