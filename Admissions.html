@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admissions - Mysk University</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* KEEP ALL YOUR EXISTING CSS STYLES - THEY REMAIN THE SAME */
+        :root {
+            --primary: #003366;
+            --primary-light: #4db8ff;
+            --secondary: #0059b3;
+            --accent: #ff6b00;
+            --light-bg: #f4f8ff;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #e0e0e0;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo h1 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .nav-links ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links ul li a:hover {
+            color: var(--primary-light);
+        }
+
+        .nav-links ul li a.active {
+            color: var(--primary-light);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(rgba(0, 51, 102, 0.8), rgba(0, 89, 179, 0.8)), url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2064&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23004d99" fill-opacity="0.2" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,192C1248,192,1344,128,1392,96L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 18px;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background-color: var(--accent);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            background-color: #e55a00;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Main Content */
+        .content {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        /* Programs Section */
+        .programs-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .program-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .program-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .program-body {
+            padding: 20px;
+        }
+
+        .program-body ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .program-body li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .program-body li:last-child {
+            border-bottom: none;
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .level-intermediate {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .level-advanced {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .level-expert {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+
+        /* Requirements */
+        .requirements-list, .process-list {
+            padding-left: 20px;
+        }
+
+        .requirements-list li, .process-list li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .requirements-list li:before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .process-list li:before {
+            content: counter(item);
+            counter-increment: item;
+            background-color: var(--primary);
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            position: absolute;
+            left: 0;
+        }
+
+        .process-list {
+            counter-reset: item;
+        }
+
+        /* Fee Structure */
+        .fee-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .fee-option {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .fee-option:hover {
+            border-color: var(--primary-light);
+        }
+
+        .fee-option.active {
+            border-color: var(--primary);
+            background-color: rgba(0, 51, 102, 0.05);
+        }
+
+        #fee-structure {
+            background: #f0f6ff;
+            padding: 20px;
+            margin-top: 10px;
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .fee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .fee-table th, .fee-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .fee-table th {
+            background-color: rgba(0, 51, 102, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .fee-table tr:last-child td {
+            border-bottom: none;
+            font-weight: 700;
+            background-color: rgba(0, 51, 102, 0.05);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 900px;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .close {
+            color: var(--primary);
+            font-size: 26px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close:hover {
+            color: var(--error);
+        }
+
+        /* Form Styling */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        label.required:after {
+            content: " *";
+            color: var(--error);
+        }
+
+        select, input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-family: "Poppins", sans-serif;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(77, 184, 255, 0.2);
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            border: 1px dashed var(--border);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-label:hover {
+            background-color: #e9ecef;
+            border-color: var(--primary-light);
+        }
+
+        .file-list {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background-color: #e55a00;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        .success-message h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            color: #cccccc;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background-color: var(--primary);
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: block;
+            }
+
+            .nav-links ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .header p {
+                font-size: 16px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .fee-selector {
+                flex-direction: column;
+            }
+
+            .programs-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <h1>MYSK UNIVERSITY</h1>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="About.html">ABOUT</a></li>
+                <li><a href="Course.html">COURSES</a></li>
+                <li><a href="Blog.html">BLOG</a></li>
+            </ul>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <span>☰</span>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1>Welcome to Mysk University Admissions</h1>
+            <p>Begin your journey to academic excellence with our streamlined admission process</p>
+            <button class="cta-button" onclick="openForm()">Start Your Application</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Academic Programs -->
+        <div class="card">
+            <h2>Academic Programs</h2>
+            <p>Mysk University offers a variety of short courses designed to equip you with practical skills for today's job market.</p>
+            
+            <div class="programs-container">
+                <!-- Intermediate Programs -->
+                <div class="program-card">
+                    <div class="program-header">
+                        <h3>Intermediate Level</h3>
+                        <span class="level-badge level-intermediate">3-6 Months</span>
+                    </div>
+                    <div class="program-body">
+                        <ul>
+                            <li>Nursing Assistant</li>
+                            <li>Catering & Hospitality</li>
+                            <li>Basic Plumbing</li>
+                            <li>Computer Basics</li>
+                            <li>Graphic Design Fundamentals</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Advanced Programs -->
+                <div class="program-card">
+                    <div class="program-header">
+                        <h3>Advanced Level</h3>
+                        <span class="level-badge level-advanced">6-12 Months</span>
+                    </div>
+                    <div class="program-body">
+                        <ul>
+                            <li>Practical Nursing</li>
+                            <li>Hotel Management</li>
+                            <li>Advanced Plumbing</li>
+                            <li>Software Development</li>
+                            <li>Automotive Engineering</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Expert Programs -->
+                <div class="program-card">
+                    <div class="program-header">
+                        <h3>Expert Level</h3>
+                        <span class="level-badge level-expert">12-18 Months</span>
+                    </div>
+                    <div class="program-body">
+                        <ul>
+                            <li>Clinical Nursing</li>
+                            <li>Executive Chef Training</li>
+                            <li>Industrial Plumbing</li>
+                            <li>AI & Machine Learning</li>
+                            <li>Mechanical Engineering</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admission Requirements -->
+        <div class="card">
+            <div class="section">
+                <h2>Admission Requirements</h2>
+                <ul class="requirements-list">
+                    <li>Completed Application Form with accurate personal information</li>
+                    <li>Two recent passport-size photographs (colored, white background)</li>
+                    <li>Clear copy of National ID or Passport (for international students)</li>
+                    <li>Certified copies of High School Transcripts and Certificates</li>
+                    <li>Valid Certificate of Good Conduct issued within the last 6 months</li>
+                    <li>Proof of application fee payment (non-refundable)</li>
+                    <li>Medical examination report from a recognized health facility</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Registration Process</h2>
+                <ol class="process-list">
+                    <li>Fill out the online application form completely</li>
+                    <li>Upload all required documents in the specified formats</li>
+                    <li>Pay the non-refundable application fee through available payment methods</li>
+                    <li>Submit your application and await confirmation email</li>
+                    <li>Check your application status regularly through your portal account</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Fee Structure -->
+        <div class="card">
+            <div class="section">
+                <h2>Fee Structure</h2>
+                <p>Select a program level to view the detailed fee structure:</p>
+                
+                <div class="fee-selector">
+                    <div class="fee-option active" data-program="intermediate">
+                        <h3>Intermediate</h3>
+                        <p>3-6 Month Programs</p>
+                    </div>
+                    <div class="fee-option" data-program="advanced">
+                        <h3>Advanced</h3>
+                        <p>6-12 Month Programs</p>
+                    </div>
+                    <div class="fee-option" data-program="expert">
+                        <h3>Expert</h3>
+                        <p>12-18 Month Programs</p>
+                    </div>
+                </div>
+
+                <div id="fee-structure">
+                    <!-- Fee content will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Apply Now Section -->
+        <div class="card" style="text-align: center;">
+            <h2>Ready to Apply?</h2>
+            <p style="margin-bottom: 25px;">Start your application process now and take the first step toward your academic future.</p>
+            <button class="btn-accent" onclick="openForm()">Begin Application</button>
+        </div>
+    </div>
+
+    <!-- Application Form Modal -->
+    <div id="formModal" class="modal">
+        <div class="modal-content" id="printable-form">
+            <div class="modal-header">
+                <h2>Mysk University Admission Form</h2>
+                <span class="close" onclick="closeForm()">&times;</span>
+            </div>
+
+            <form id="admissionForm">
+                <div class="form-grid">
+                    <!-- Personal Information -->
+                    <div class="form-group">
+                        <label class="required">Full Name</label>
+                        <input type="text" name="full_name" placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Email Address</label>
+                        <input type="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Phone Number</label>
+                        <input type="tel" name="phone" placeholder="Enter your phone number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Date of Birth</label>
+                        <input type="date" name="date_of_birth" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Gender</label>
+                        <select name="gender" required>
+                            <option value="">-- Select Gender --</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                            <option>Prefer not to say</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Country of Residence</label>
+                        <select name="country" required>
+                            <option value="">-- Select Country --</option>
+                            <option>United States</option>
+                            <option>United Kingdom</option>
+                            <option>Canada</option>
+                            <option>Australia</option>
+                            <option>Kenya</option>
+                            <option>Uganda</option>
+                            <option>Tanzania</option>
+                            <option>Nigeria</option>
+                            <option>South Africa</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Program Selection -->
+                    <div class="form-group">
+                        <label class="required">Select Program Level</label>
+                        <select id="programLevel" name="program_level" required>
+                            <option value="">-- Select Level --</option>
+                            <option>Intermediate</option>
+                            <option>Advanced</option>
+                            <option>Expert</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Select Specific Program</label>
+                        <select id="specificProgram" name="specific_program" required>
+                            <option value="">-- Select Program --</option>
+                            <!-- Options will be populated based on level selection -->
+                        </select>
+                    </div>
+                    
+                    <!-- Parent/Guardian Information -->
+                    <div class="form-group">
+                        <label class="required">Do you have parents/guardians?</label>
+                        <select id="hasParents" name="has_parents" required>
+                            <option value="">-- Select --</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="parentNameGroup">
+                        <label class="required">Parent/Guardian Full Name</label>
+                        <input type="text" name="parent_name" placeholder="Enter parent/guardian name">
+                    </div>
+                    
+                    <div class="form-group" id="parentContactGroup">
+                        <label class="required">Parent/Guardian Contact</label>
+                        <input type="tel" name="parent_contact" placeholder="Enter parent/guardian phone number">
+                    </div>
+                    
+                    <!-- Personal Statement -->
+                    <div class="form-group full-width">
+                        <label>Personal Statement</label>
+                        <textarea name="personal_statement" rows="4" placeholder="Tell us about your academic interests, career goals, and why you want to join our university..."></textarea>
+                    </div>
+                    
+                    <!-- Document Uploads -->
+                    <div class="form-group">
+                        <label class="required">Upload Applicant's Photo</label>
+                        <div class="file-upload">
+                            <input type="file" accept="image/*" required>
+                            <div class="file-upload-label">
+                                <span>Choose File</span>
+                            </div>
+                        </div>
+                        <div class="file-list" id="photo-file"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">High School Certificates / Transcripts</label>
+                        <div class="file-upload">
+                            <input type="file" multiple required>
+                            <div class="file-upload-label">
+                                <span>Choose Files</span>
+                            </div>
+                        </div>
+                        <div class="file-list" id="certificate-files"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">National ID / Passport Copy</label>
+                        <div class="file-upload">
+                            <input type="file" required>
+                            <div class="file-upload-label">
+                                <span>Choose File</span>
+                            </div>
+                        </div>
+                        <div class="file-list" id="id-file"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Certificate of Good Conduct</label>
+                        <div class="file-upload">
+                            <input type="file" required>
+                            <div class="file-upload-label">
+                                <span>Choose File</span>
+                            </div>
+                        </div>
+                        <div class="file-list" id="conduct-file"></div>
+                    </div>
+                    
+                    <div class="form-group" id="sponsorIdGroup">
+                        <label class="required">Sponsor's ID Copy</label>
+                        <div class="file-upload">
+                            <input type="file">
+                            <div class="file-upload-label">
+                                <span>Choose File</span>
+                            </div>
+                        </div>
+                        <div class="file-list" id="sponsor-file"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label>
+                        <input type="checkbox" required>
+                        I certify that all information provided in this application is true and complete to the best of my knowledge.
+                    </label>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="saveForm()">Save Form</button>
+                    <button type="button" class="btn-secondary" onclick="printForm()">Print Form</button>
+                    <button type="button" class="btn-secondary" onclick="downloadForm()">Download PDF</button>
+                    <button type="submit" class="btn-primary">Submit Application</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="successMessage" class="success-message">
+        <h3>Application Submitted Successfully!</h3>
+        <p>Thank you for applying to Mysk University. Your application has been received and is currently under review.</p>
+        <p>We will contact you via email within 3-5 business days with further instructions.</p>
+        <button class="btn-primary" onclick="closeSuccessMessage()">Close</button>
+    </div>
+
+    <!-- Loading Message -->
+    <div id="loadingMessage" class="success-message" style="display: none; background: #e3f2fd;">
+        <h3><i class="fas fa-spinner fa-spin"></i> Submitting Application...</h3>
+        <p>Please wait while we save your application to our database.</p>
+    </div>
+
+    <!-- Error Message -->
+    <div id="errorMessage" class="success-message" style="display: none; background: #ffebee; color: #c62828;">
+        <h3><i class="fas fa-exclamation-triangle"></i> Submission Failed</h3>
+        <p id="errorText">There was an error submitting your application. Please try again.</p>
+        <button class="btn-primary" onclick="closeErrorMessage()">Try Again</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <h3>Connect With Mysk University</h3>
+            <div class="social-links">
+                <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Mysk University. All Rights Reserved. | P.O. Box 1234, Kampala, Uganda | Tel: +256 41 4 123 456</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://trjgvbmncjlpcigedjiv.supabase.co'; // REPLACE WITH YOUR URL
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyamd2Ym1uY2pscGNpZ2Vkaml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM4MDQ2MzAsImV4cCI6MjA3OTM4MDYzMH0.EqvqilnFFsMC89jJdg_H-9GNn1uXvNmr6HW0A7cSIR0'; // REPLACE WITH YOUR KEY
+        
+        let supabase;
+
+        // Initialize Supabase
+        function initializeSupabase() {
+            try {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                console.log('Supabase initialized successfully');
+                return true;
+            } catch (error) {
+                console.error('Failed to initialize Supabase:', error);
+                return false;
+            }
+        }
+
+        // Mobile menu toggle
+        document.getElementById('mobileMenu').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        // Fee structure display
+        const feeOptions = document.querySelectorAll('.fee-option');
+        const feeStructure = document.getElementById('fee-structure');
+        
+        feeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove active class from all options
+                feeOptions.forEach(opt => opt.classList.remove('active'));
+                // Add active class to clicked option
+                this.classList.add('active');
+                
+                // Show fee structure based on selection
+                const program = this.getAttribute('data-program');
+                showFees(program);
+            });
+        });
+
+        function showFees(program) {
+            let fees = "";
+
+            if (program === "intermediate") {
+                fees = `
+                    <h3>Intermediate Level Fee Structure (Total for 3-6 months)</h3>
+                    <table class="fee-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Amount (UGX)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tuition Fee</td>
+                                <td>4,500,000</td>
+                            </tr>
+                            <tr>
+                                <td>Registration Fee</td>
+                                <td>200,000</td>
+                            </tr>
+                            <tr>
+                                <td>Library Fee</td>
+                                <td>150,000</td>
+                            </tr>
+                            <tr>
+                                <td>ICT Fee</td>
+                                <td>250,000</td>
+                            </tr>
+                            <tr>
+                                <td>Medical Insurance</td>
+                                <td>300,000</td>
+                            </tr>
+                            <tr>
+                                <td>Student Activity Fee</td>
+                                <td>100,000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td><strong>5,500,000</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 15px;"><em>Accommodation (optional): 800,000 per month</em></p>`;
+            } else if (program === "advanced") {
+                fees = `
+                    <h3>Advanced Level Fee Structure (Total for 6-12 months)</h3>
+                    <table class="fee-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Amount (UGX)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tuition Fee</td>
+                                <td>8,500,000</td>
+                            </tr>
+                            <tr>
+                                <td>Registration Fee</td>
+                                <td>300,000</td>
+                            </tr>
+                            <tr>
+                                <td>Library Fee</td>
+                                <td>250,000</td>
+                            </tr>
+                            <tr>
+                                <td>ICT Fee</td>
+                                <td>400,000</td>
+                            </tr>
+                            <tr>
+                                <td>Medical Insurance</td>
+                                <td>500,000</td>
+                            </tr>
+                            <tr>
+                                <td>Student Activity Fee</td>
+                                <td>200,000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td><strong>10,150,000</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 15px;"><em>Accommodation (optional): 800,000 per month</em></p>`;
+            } else if (program === "expert") {
+                fees = `
+                    <h3>Expert Level Fee Structure (Total for 12-18 months)</h3>
+                    <table class="fee-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Amount (UGX)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tuition Fee</td>
+                                <td>14,000,000</td>
+                            </tr>
+                            <tr>
+                                <td>Registration Fee</td>
+                                <td>500,000</td>
+                            </tr>
+                            <tr>
+                                <td>Library Fee</td>
+                                <td>400,000</td>
+                            </tr>
+                            <tr>
+                                <td>ICT Fee</td>
+                                <td>600,000</td>
+                            </tr>
+                            <tr>
+                                <td>Medical Insurance</td>
+                                <td>800,000</td>
+                            </tr>
+                            <tr>
+                                <td>Student Activity Fee</td>
+                                <td>300,000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td><strong>16,600,000</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 15px;"><em>Accommodation (optional): 800,000 per month</em></p>`;
+            }
+
+            feeStructure.innerHTML = fees ? fees : "";
+            feeStructure.style.display = fees ? "block" : "none";
+        }
+
+        // Show intermediate fees by default
+        showFees("intermediate");
+
+        // Form modal functions
+        function openForm() {
+            document.getElementById("formModal").style.display = "flex";
+        }
+
+        function closeForm() {
+            document.getElementById("formModal").style.display = "none";
+        }
+
+        // Program selection logic
+        document.getElementById('programLevel').addEventListener('change', function() {
+            const level = this.value;
+            const programSelect = document.getElementById('specificProgram');
+            
+            // Clear existing options
+            programSelect.innerHTML = '<option value="">-- Select Program --</option>';
+            
+            // Add programs based on level
+            if (level === 'Intermediate') {
+                programSelect.innerHTML += `
+                    <option>Nursing Assistant</option>
+                    <option>Catering & Hospitality</option>
+                    <option>Basic Plumbing</option>
+                    <option>Computer Basics</option>
+                    <option>Graphic Design Fundamentals</option>
+                `;
+            } else if (level === 'Advanced') {
+                programSelect.innerHTML += `
+                    <option>Practical Nursing</option>
+                    <option>Hotel Management</option>
+                    <option>Advanced Plumbing</option>
+                    <option>Software Development</option>
+                    <option>Automotive Engineering</option>
+                `;
+            } else if (level === 'Expert') {
+                programSelect.innerHTML += `
+                    <option>Clinical Nursing</option>
+                    <option>Executive Chef Training</option>
+                    <option>Industrial Plumbing</option>
+                    <option>AI & Machine Learning</option>
+                    <option>Mechanical Engineering</option>
+                `;
+            }
+        });
+
+        // Parent/Guardian logic
+        document.getElementById('hasParents').addEventListener('change', function() {
+            const hasParents = this.value;
+            const parentNameGroup = document.getElementById('parentNameGroup');
+            const parentContactGroup = document.getElementById('parentContactGroup');
+            const sponsorIdGroup = document.getElementById('sponsorIdGroup');
+            
+            if (hasParents === 'yes') {
+                parentNameGroup.style.display = 'block';
+                parentContactGroup.style.display = 'block';
+                sponsorIdGroup.style.display = 'block';
+                
+                // Make fields required
+                parentNameGroup.querySelector('input').required = true;
+                parentContactGroup.querySelector('input').required = true;
+                sponsorIdGroup.querySelector('input').required = true;
+            } else {
+                parentNameGroup.style.display = 'none';
+                parentContactGroup.style.display = 'none';
+                sponsorIdGroup.style.display = 'none';
+                
+                // Remove required attribute
+                parentNameGroup.querySelector('input').required = false;
+                parentContactGroup.querySelector('input').required = false;
+                sponsorIdGroup.querySelector('input').required = false;
+            }
+        });
+
+        // Initialize parent fields as hidden
+        document.getElementById('parentNameGroup').style.display = 'none';
+        document.getElementById('parentContactGroup').style.display = 'none';
+        document.getElementById('sponsorIdGroup').style.display = 'none';
+
+        // File upload display
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const fileList = this.parentElement.nextElementSibling;
+                fileList.innerHTML = '';
+                
+                if (this.files.length > 0) {
+                    for (let i = 0; i < this.files.length; i++) {
+                        const fileItem = document.createElement('div');
+                        fileItem.className = 'file-item';
+                        fileItem.innerHTML = `${this.files[i].name}`;
+                        fileList.appendChild(fileItem);
+                    }
+                }
+            });
+        });
+
+        // Form submission - UPDATED FOR SUPABASE
+        document.getElementById('admissionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Show loading
+            document.getElementById('loadingMessage').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Initialize Supabase if not already done
+            if (!supabase) {
+                if (!initializeSupabase()) {
+                    showError('Database connection failed. Please try again later.');
+                    return;
+                }
+            }
+
+            try {
+                // Get form data
+                const formData = new FormData(this);
+                const applicationData = {};
+                
+                for (let [key, value] of formData.entries()) {
+                    applicationData[key] = value;
+                }
+
+                // Add status
+                applicationData.status = "new";
+
+                // Submit to Supabase
+                const { data, error } = await supabase
+                    .from('applications')
+                    .insert([applicationData])
+                    .select();
+
+                if (error) {
+                    throw new Error(error.message);
+                }
+
+                // Show success message
+                document.getElementById('loadingMessage').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                
+                // Reset form
+                this.reset();
+                
+                // Clear file lists
+                document.querySelectorAll('.file-list').forEach(list => {
+                    list.innerHTML = '';
+                });
+                
+                // Close modal
+                closeForm();
+
+                console.log('Application submitted successfully:', data);
+
+            } catch (error) {
+                console.error('Error submitting application:', error);
+                document.getElementById('loadingMessage').style.display = 'none';
+                showError('Failed to submit application: ' + error.message);
+            }
+        });
+
+        // Save form function
+        function saveForm() {
+            // For now, we'll just show a message since we're using Supabase
+            alert('Your progress has been saved locally. You can continue later.');
+        }
+
+        // Print form function
+        function printForm() {
+            const printContent = document.getElementById('printable-form').innerHTML;
+            const originalContent = document.body.innerHTML;
+            
+            document.body.innerHTML = printContent;
+            window.print();
+            document.body.innerHTML = originalContent;
+            location.reload();
+        }
+
+        // Download form as PDF
+        function downloadForm() {
+            alert('PDF download functionality would be implemented with a library like jsPDF in a real application.');
+        }
+
+        // Close success message
+        function closeSuccessMessage() {
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        // Close error message
+        function closeErrorMessage() {
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Show error message
+        function showError(message) {
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById("formModal");
+            if (event.target === modal) {
+                closeForm();
+            }
+        }
+
+        // Initialize Supabase when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSupabase();
+        });
+    </script>
+</body>
+</html>
