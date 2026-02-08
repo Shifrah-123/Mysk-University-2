@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mysk University Website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <section class="sub-header">
+        <nav>
+           <a href="index.html"><img src="C:\Users\user\Desktop\SCHOOL WEBSITE\Images\Mysk-Logo.png" ></a>
+           <div class="nav-links" id="navLinks">
+            <i class="fa fa-times" aria-hidden="true" onclick="hideMenu()"></i>
+               <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="About.html">ABOUT</a></li>
+                <li><a href="Course.html">COURSE</a></li>
+                <li><a href="Blog.html">BLOG</a></li>
+                <li><a href="Admissions.html">ADMISSION</a></li>
+               </ul>
+           </div>
+           <i class="fa fa-bars" aria-hidden="true" onclick="showMenu()"></i>
+        </nav>
+         <h1>Our Certificate and Online Programs for 2025</h1>
+     </section>
+
+     <!-------blog page content----->
+     <section class="blog-content">
+        <div class="row">
+            <div class="blog-left">
+                <img src="Images\grad3.jpg" alt="">
+                <h2>Our Certificate and Online Programs for 2025</h2>
+                <p>At Mysk University, we believe education should be flexible, accessible, 
+                 and future-focused. Our 2025 Certificate and Online Programs are designed 
+                 to equip students with practical skills that match the demands of todays job
+                 market whether you are beginning your career journey or advancing your professional 
+                 path.</p>
+                 <br>
+                 <p>Available Certificate Programs
+                    <br>
+                    1.Certificate in Catering and Hospitality Management
+                    <br>
+                    2.Certificate in Computer Applications
+                    <br>
+                    3.Certificate in Business Administration
+                    <br>
+                    4.Certificate in Graphic Design and Multimedia
+                    <br>
+                    5.Certificate in Nursing Assistant Training
+                 </p>
+                 <br>
+                 <p>Why Choose Mysk Universitys 2025 Programs?
+                    <br>
+                 Industry-Relevant Curriculum: Designed to meet evolving career demands.
+                 <br>
+                 Flexible Study Options: Learn on campus, online, or through blended modes.
+                 <br>
+                 Experienced Faculty: Learn from professionals with real-world expertise.
+                 <br>
+                 Career Guidance: Access mentorship and job placement support after completion.</p>
+                 <br>
+                 <p>Applications for 2025 are now open! Join Mysk University and take the first step
+                  toward achieving your academic and professional goals.</p>
+
+                  <div class="comment-box">
+                    <h3>Leave a comment</h3>
+
+                    <form class="comment-form">
+                        <input type="text" placeholder="Enter Name">
+                        <input type="email" placeholder="Enter Email">
+                        <textarea rows="5" placeholder="Your Comment">
+                        </textarea>
+                        <button type="submit" class="hero-btn red-btn">POST COMMENT</button>
+                    </form>
+                </div>
+
+
+
+            </div>
+             <div class="blog-right">
+                <h3>Post Categories</h3>
+                <div>
+                    <span>Business Analytics</span>
+                    <span>21</span>
+                </div>
+                <div>
+                    <span>Business Administration</span>
+                    <span>24</span>
+                </div>
+                <div>
+                    <span>Catering</span>
+                    <span>28</span>
+                </div>
+                <div>
+                    <span>Nursing</span>
+                    <span>15</span>
+                </div>
+                <div>
+                    <span>Journerlism</span>
+                    <span>34</span>
+                </div>
+                <div>
+                    <span>Cyber Security</span>
+                    <span>27</span>
+                </div>
+
+             </div>
+        </div>
+     </section>
+     <!-------Facilities----->
+    <!-------Footer----->
+      <section class="footer">
+        <h4>About Us</h4>
+        <p>Mysk University is dedicated to excellence in education, research, and innovation. <br>We provide a supportive learning environment that prepares students for global success.</p>
+        <div class="icons">
+            <i class="fa fa-facebook"></i>
+            <i class="fa fa-twitter"></i>
+            <i class="fa fa-instagram"></i>
+            <i class="fa fa-linkedin"></i>
+        </div>
+      </section>
+
+     <!-------JavaScript for toogle menu------>
+     <script>
+        var navLinks = document.getElementById("navLinks");
+        function showMenu(){
+            navLinks.style.right = "0";
+        }
+        function hideMenu(){
+            navLinks.style.right = "-200px";
+        }
+     </script>
+</body>
+</html>
