@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visit Us - Mysk University</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #003366;
+            --primary-light: #4db8ff;
+            --secondary: #0059b3;
+            --accent: #ff6b00;
+            --light-bg: #f4f8ff;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #e0e0e0;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo h1 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .nav-links ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links ul li a:hover {
+            color: var(--primary-light);
+        }
+
+        .nav-links ul li a.active {
+            color: var(--primary-light);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(rgba(0, 51, 102, 0.8), rgba(0, 89, 179, 0.8)), url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2064&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 18px;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background-color: var(--accent);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            background-color: #e55a00;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Main Content */
+        .content {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        /* Campus Tour Section */
+        .campus-tour {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .tour-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tour-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            height: 400px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+        }
+
+        .tour-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .tour-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .tour-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            background-color: #f0f6ff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        /* Tour Experience Timeline */
+        .tour-timeline {
+            margin-top: 30px;
+            position: relative;
+        }
+
+        .tour-timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--primary-light);
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 20px;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: #f8faff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        /* Location & Directions */
+        .location-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .location-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .address-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .address-item:last-child {
+            border-bottom: none;
+        }
+
+        .campus-highlights {
+            background: #f8faff;
+            border-radius: 10px;
+            padding: 25px;
+            height: 100%;
+        }
+
+        .highlight-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .highlight-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        /* Campus Life */
+        .campus-life {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .life-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .life-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .life-image {
+            height: 200px;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+        }
+
+        .life-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .life-card:hover .life-image img {
+            transform: scale(1.1);
+        }
+
+        .life-content {
+            padding: 20px;
+        }
+
+        /* Visit Planning */
+        .visit-planning {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .planning-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--error);
+        }
+
+        select, input[type="text"], input[type="email"], input[type="date"], textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(77, 184, 255, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-accent:hover {
+            background-color: #e55a00;
+        }
+
+        .tour-type {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tour-type:last-child {
+            border-bottom: none;
+        }
+
+        .additional-info ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .additional-info li {
+            margin-bottom: 8px;
+        }
+
+        /* Photo Gallery */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            height: 200px;
+            position: relative;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* FAQ Section */
+        .faq-container {
+            margin-top: 20px;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 15px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background-color: #e9ecef;
+        }
+
+        .faq-answer {
+            padding: 15px;
+            display: none;
+            background-color: white;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        .success-message h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            color: #cccccc;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background-color: var(--primary);
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: block;
+            }
+
+            .nav-links ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .header p {
+                font-size: 16px;
+            }
+
+            .campus-tour {
+                grid-template-columns: 1fr;
+            }
+
+            .location-container {
+                grid-template-columns: 1fr;
+            }
+
+            .visit-planning {
+                grid-template-columns: 1fr;
+            }
+
+            .tour-features {
+                grid-template-columns: 1fr;
+            }
+
+            .campus-life {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <h1>MYSK UNIVERSITY</h1>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="About.html">ABOUT</a></li>
+                <li><a href="Course.html">COURSES</a></li>
+                <li><a href="Blog.html">BLOG</a></li>
+                <li><a href="Admissions.html">ADMISSIONS</a></li>
+                
+            </ul>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <span>☰</span>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1>Visit Mysk University</h1>
+            <p>Experience our vibrant campus, meet our community, and discover why Mysk University is the perfect place for your academic journey.</p>
+            <button class="cta-button" onclick="scrollToSection('visit-planning')">Schedule Your Visit</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Campus Tour Section -->
+        <div class="card">
+            <h2>Campus Tour Experience</h2>
+            <p>Discover our state-of-the-art facilities, beautiful grounds, and vibrant student life through our guided campus tours.</p>
+            
+            <div class="campus-tour">
+                <div class="tour-info">
+                    <h3>Explore Our Campus</h3>
+                    <p>Our 150-acre campus features modern academic buildings, research facilities, student residences, and recreational spaces designed to foster learning and community.</p>
+                    
+                    <div class="tour-features">
+                        <div class="feature-item">
+                            <h4>Academic Buildings</h4>
+                            <p>Modern classrooms and labs</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>Library</h4>
+                            <p>200,000+ resources</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>Student Center</h4>
+                            <p>Social and dining spaces</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>Sports Facilities</h4>
+                            <p>Gym, pool, and fields</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tour-image">
+                    <img src="Images\campus over view.jpg">
+                </div>
+            </div>
+            
+            <!-- Tour Experience Timeline -->
+            <div class="tour-timeline">
+                <h3>Your Tour Experience</h3>
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Welcome & Introduction</h4>
+                        <p>Meet your student ambassador and receive an overview of the tour and campus highlights.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Academic Facilities</h4>
+                        <p>Visit our state-of-the-art classrooms, laboratories, and specialized learning spaces.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Student Residences</h4>
+                        <p>Explore our comfortable and modern student housing options and common areas.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Campus Dining</h4>
+                        <p>Experience our diverse dining options and sample a meal at our student cafeteria.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h4>Q&A Session</h4>
+                        <p>Meet with admissions staff and current students to get all your questions answered.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location & Directions -->
+        <div class="card">
+            <h2>Location & Directions</h2>
+            <p>Find your way to Mysk University with our detailed location information and transportation options.</p>
+            
+            <div class="location-container">
+                <div class="location-details">
+                    <div class="address-item">
+                        <h3>Main Campus</h3>
+                        <p>Mysk University<br>
+                        123 Education Avenue<br>
+                        Kampala, Uganda</p>
+                    </div>
+                    
+                    <div class="address-item">
+                        <h3>Contact Information</h3>
+                        <p>Phone: +256 41 4 123 456<br>
+                        Email: visit@mysk.edu.ug<br>
+                        Admissions: admissions@mysk.edu.ug</p>
+                    </div>
+                    
+                    <div class="address-item">
+                        <h3>Visiting Hours</h3>
+                        <p>Monday - Friday: 8:00 AM - 5:00 PM<br>
+                        Saturday: 9:00 AM - 2:00 PM<br>
+                        Sunday: Closed</p>
+                    </div>
+                    
+                    <div class="address-item">
+                        <h3>Transportation</h3>
+                        <p>Public buses stop directly outside campus<br>
+                        Secure parking available for visitors<br>
+                        Airport pickup service available upon request</p>
+                    </div>
+                </div>
+                
+                <!-- Campus Highlights -->
+                <div class="campus-highlights">
+                    <h3>Campus Highlights</h3>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <h4>Academic Excellence</h4>
+                            <p>Ranked among top universities in East Africa</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <h4>Diverse Community</h4>
+                            <p>Students from 25+ countries worldwide</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <div>
+                            <h4>Research Focus</h4>
+                            <p>State-of-the-art research facilities</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div>
+                            <h4>Green Campus</h4>
+                            <p>Environmentally sustainable practices</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campus Life -->
+        <div class="card">
+            <h2>Campus Life & Facilities</h2>
+            <p>Discover the vibrant student life and excellent facilities that make Mysk University a home away from home.</p>
+            
+            <div class="campus-life">
+                <div class="life-card">
+                    <div class="life-image">
+                        <img src="Images\class.jpg">
+                    </div>
+                    <div class="life-content">
+                        <h3>Learning Spaces</h3>
+                        <p>Modern classrooms, specialized labs, and collaborative study areas designed to enhance your learning experience.</p>
+                    </div>
+                </div>
+                
+                <div class="life-card">
+                    <div class="life-image">
+                        <img src="Images\hostel.jpg">
+                    </div>
+                    <div class="life-content">
+                        <h3>Residential Life</h3>
+                        <p>Comfortable on-campus accommodation with modern amenities and vibrant residential communities.</p>
+                    </div>
+                </div>
+                
+                <div class="life-card">
+                    <div class="life-image">
+                        <img src="Images\gym.jpg">
+                    </div>
+                    <div class="life-content">
+                        <h3>Sports & Recreation</h3>
+                        <p>State-of-the-art sports facilities, fitness center, swimming pool, and various student clubs and organizations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visit Planning -->
+        <!-- Visit Planning -->
+<div class="card" id="visit-planning">
+    <h2>Plan Your Visit</h2>
+    <p>Schedule your campus tour and let us prepare a personalized experience for you.</p>
+    
+    <div class="visit-planning">
+        <div class="planning-form">
+            <h3>Schedule a Campus Tour</h3>
+            <p>Fill out this form to schedule your personalized campus visit. We'll contact you to confirm the details.</p>
+            
+            <form id="visitForm">
+                <div class="form-group">
+                    <label class="required">Full Name</label>
+                    <input type="text" name="full_name" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Email Address</label>
+                    <input type="email" name="email" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Phone Number</label>
+                    <input type="text" name="phone" placeholder="Enter your phone number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Preferred Visit Date</label>
+                    <input type="date" name="preferred_date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Number of Visitors</label>
+                    <select name="number_of_visitors">
+                        <option value="1">1 person</option>
+                        <option value="2">2 people</option>
+                        <option value="3">3 people</option>
+                        <option value="4">4 people</option>
+                        <option value="5">5+ people</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Areas of Interest</label>
+                    <select name="areas_of_interest">
+                        <option value="general">General Campus Tour</option>
+                        <option value="academic">Academic Facilities</option>
+                        <option value="housing">Student Housing</option>
+                        <option value="sports">Sports Facilities</option>
+                        <option value="library">Library & Research</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Additional Notes</label>
+                    <textarea name="additional_notes" placeholder="Any specific requests or questions..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn-primary">Schedule My Visit</button>
+            </form>
+        </div>
+        
+        <!-- Keep the rest of your tour-options-info section the same -->
+        <div class="tour-options-info">
+            <h3>Tour Options</h3>
+            
+            <div class="tour-type">
+                <h4>General Campus Tour</h4>
+                <p>Comprehensive tour of our main campus facilities, including academic buildings, student center, and recreational areas. Duration: 90 minutes.</p>
+            </div>
+            
+            <div class="tour-type">
+                <h4>Academic Department Tour</h4>
+                <p>Focused tour of specific academic departments and facilities related to your field of interest. Duration: 60 minutes.</p>
+            </div>
+            
+            <div class="tour-type">
+                <h4>Student Life Tour</h4>
+                <p>Explore residential halls, dining facilities, and student activity centers. Duration: 75 minutes.</p>
+            </div>
+            
+            <div class="tour-type">
+                <h4>Personalized Tour</h4>
+                <p>Customized tour based on your specific interests and needs. Duration: Flexible.</p>
+            </div>
+            
+            <div class="additional-info">
+                <h4>What to Expect</h4>
+                <ul>
+                    <li>Guided tour by current student ambassadors</li>
+                    <li>Q&A session with admissions staff</li>
+                    <li>Information session about programs and admissions</li>
+                    <li>Campus map and information packet</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+    
+        
+
+        <!-- Student Testimonials -->
+        <div class="card">
+            <h2>What Our Students Say</h2>
+            <p>Hear from current students about their experiences at Mysk University.</p>
+            
+            <div class="testimonials">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "The campus tour was what convinced me to choose Mysk University. Seeing the modern facilities and meeting the friendly community made me feel right at home."
+                    </div>
+                    <div class="testimonial-author">
+                        - Sarah K., Business Administration Student
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "I was impressed by the state-of-the-art labs and research facilities during my visit. It showed me that Mysk is committed to providing the best resources for students."
+                    </div>
+                    <div class="testimonial-author">
+                        - David M., Computer Science Student
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "The student ambassadors who gave our tour were so knowledgeable and passionate. They answered all our questions and made us feel welcome."
+                    </div>
+                    <div class="testimonial-author">
+                        - Grace N., Nursing Student
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="card">
+            <h2>Frequently Asked Questions</h2>
+            <p>Find answers to common questions about visiting Mysk University.</p>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">How do I schedule a campus tour?</div>
+                    <div class="faq-answer">
+                        <p>You can schedule a campus tour by filling out the form on this page, calling our admissions office at +256 41 4 123 456, or emailing visit@mysk.edu.ug. We recommend scheduling at least one week in advance.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">What should I bring for my campus visit?</div>
+                    <div class="faq-answer">
+                        <p>We recommend bringing comfortable walking shoes, weather-appropriate clothing, a notebook for any questions or observations, and a form of identification. If you're interested in specific programs, you might want to bring questions for faculty in those departments.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">Can I meet with faculty during my visit?</div>
+                    <div class="faq-answer">
+                        <p>Yes, we can arrange meetings with faculty members in your area of interest. Please indicate this preference when scheduling your visit, and we will do our best to coordinate based on faculty availability.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">Is parking available on campus?</div>
+                    <div class="faq-answer">
+                        <p>Yes, we provide complimentary parking for visitors in designated areas. When you schedule your visit, we will provide detailed parking instructions and a campus map.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">What if I need to cancel or reschedule my visit?</div>
+                    <div class="faq-answer">
+                        <p>If you need to cancel or reschedule your campus visit, please contact us at least 24 hours in advance by calling +256 41 4 123 456 or emailing visit@mysk.edu.ug. We understand that plans can change and will be happy to reschedule your visit.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="card" style="text-align: center;">
+            <h2>Ready to Experience Mysk University?</h2>
+            <p style="margin-bottom: 25px;">Schedule your campus visit today and discover why Mysk University could be the perfect fit for your educational journey.</p>
+            <button class="btn-accent" onclick="scrollToSection('visit-planning')">Schedule Your Visit</button>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="successMessage" class="success-message">
+        <h3>Visit Scheduled Successfully!</h3>
+        <p>Thank you for scheduling a campus visit to Mysk University. We're excited to show you our campus and help you learn more about our programs.</p>
+        <p>Our admissions team will contact you within 24 hours to confirm your visit details and provide additional information.</p>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <h3>Connect With Mysk University</h3>
+            <div class="social-links">
+                <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Mysk University. All Rights Reserved. | P.O. Box 1234, Kampala, Uganda | Tel: +256 41 4 123 456</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenu').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        // FAQ toggle functionality
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const isVisible = answer.style.display === 'block';
+            
+            // Close all FAQ answers
+            document.querySelectorAll('.faq-answer').forEach(ans => {
+                ans.style.display = 'none';
+            });
+            
+            // Open clicked FAQ answer if it was closed
+            if (!isVisible) {
+                answer.style.display = 'block';
+            }
+        }
+
+        // Scroll to section
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Form submission
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://trjgvbmncjlpcigedjiv.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyamd2Ym1uY2pscGNpZ2Vkaml2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM4MDQ2MzAsImV4cCI6MjA3OTM4MDYzMH0.EqvqilnFFsMC89jJdg_H-9GNn1uXvNmr6HW0A7cSIR0'; 
+        
+        let supabase;
+
+        // Initialize Supabase
+        function initializeSupabase() {
+            try {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                console.log('Supabase initialized successfully');
+                return true;
+            } catch (error) {
+                console.error('Failed to initialize Supabase:', error);
+                return false;
+            }
+        }
+
+        // Form submission -
+document.getElementById('visitForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    console.log('Starting visit form submission...');
+    
+    // Show loading
+    document.getElementById('successMessage').style.display = 'none';
+    const submitButton = this.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scheduling...';
+    submitButton.disabled = true;
+
+    // Initialize Supabase if not already done
+    if (!supabase) {
+        if (!initializeSupabase()) {
+            alert('Database connection failed. Please try again later.');
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
+            return;
+        }
+    }
+
+    try {
+        // Get form values directly (more reliable than FormData)
+        const formData = {
+            full_name: this.querySelector('[name="full_name"]').value.trim(),
+            email: this.querySelector('[name="email"]').value.trim(),
+            phone: this.querySelector('[name="phone"]').value.trim(),
+            preferred_date: this.querySelector('[name="preferred_date"]').value,
+            number_of_visitors: this.querySelector('[name="number_of_visitors"]').value,
+            areas_of_interest: this.querySelector('[name="areas_of_interest"]').value,
+            additional_notes: this.querySelector('[name="additional_notes"]').value.trim(),
+            status: "pending",
+            created_at: new Date().toISOString()
+        };
+
+        console.log('Form data to submit:', formData);
+
+        // Validate required fields
+        if (!formData.full_name) {
+            throw new Error('Full name is required');
+        }
+        if (!formData.email) {
+            throw new Error('Email is required');
+        }
+        if (!formData.phone) {
+            throw new Error('Phone number is required');
+        }
+        if (!formData.preferred_date) {
+            throw new Error('Preferred date is required');
+        }
+
+        // Submit to Supabase
+        const { data, error } = await supabase
+            .from('visits')
+            .insert([formData])
+            .select();
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        console.log('Visit scheduled successfully!', data);
+
+        // Show success message
+        document.getElementById('successMessage').style.display = 'block';
+        
+        // Reset form
+        this.reset();
+        
+        // Scroll to success message
+        document.getElementById('successMessage').scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'center'
+        });
+
+    } catch (error) {
+        console.error('Error scheduling visit:', error);
+        alert('Failed to schedule visit: ' + error.message);
+    } finally {
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+    }
+});
+    </script>
+</body>
+</html>
