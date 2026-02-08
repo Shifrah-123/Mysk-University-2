@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mysk University Website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <section class="sub-header">
+        <nav>
+           <a href="index.html"><img src="C:\Users\user\Desktop\SCHOOL WEBSITE\Images\Mysk-Logo.png" ></a>
+           <div class="nav-links" id="navLinks">
+            <i class="fa fa-times" aria-hidden="true" onclick="hideMenu()"></i>
+               <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="About.html">ABOUT</a></li>
+                <li><a href="Course.html">COURSE</a></li>
+                <li><a href="Blog.html">BLOG</a></li>
+                <li><a href="Admissions.html">ADMISSION</a></li>
+           </div>
+           <i class="fa fa-bars" aria-hidden="true" onclick="showMenu()"></i>
+        </nav>
+         <h1>Our Courses</h1>
+     </section>
+
+     <!-------Course----->
+     <section class="course">
+        <h1>Courses We Offer</h1>
+        <p>We offer a variety of courses to suit your preference
+            according to levels</p>
+        <div class="row">
+           <div class="course-col">
+            <h3>Catering</h3>
+            <p>This course equips students with essential skills in 
+                food preparation, service management, and event catering. 
+                Learners gain hands-on experience in kitchen operations, 
+                menu planning, and hospitality standards, preparing them 
+                for careers in restaurants, hotels, and event management.</p>
+           </div> 
+
+           <div class="course-col">
+            <h3>Nursing</h3>
+            <p>At Mysk University, the journey to saving lives begins here. 
+                Our Nursing program blends science, compassion, and hands-on 
+                clinical experience to prepare students for a rewarding career 
+                in healthcare. Graduates emerge as skilled, caring professionals 
+                ready to make a real difference in patients lives.</p>
+           </div> 
+
+           <div class="course-col">
+            <h3>Computer Engineering</h3>
+            <p>Innovation starts here. Mysk University's Computer Engineering program 
+                empowers future tech leaders to design, build, and optimize intelligent 
+                systems. From hardware to software, students learn to merge creativity 
+                with technology shaping solutions that power the digital world.</p>
+           </div>
+        </div>
+     </section>
+
+      <!-------Facilities----->
+      <section class="facilities">
+        <h1>More of Our Facilities</h1>
+        <p>At Mysk University, we provide state-of-the-art facilities 
+            designed to support academic excellence and student well-being. 
+            From advanced laboratories and modern classrooms to fully equipped 
+            libraries, innovation hubs, and recreational spaces, our campus offers 
+            a dynamic environment that fosters learning, collaboration, and personal 
+            growth.</p>
+
+            <div class="row">
+                <div class="facilities-col">
+                    <img src="Images\library.jpg">
+                    <h3>Stocked Library</h3>
+                    <p>Our library is a hub of knowledge and discovery. It offers
+                         a quiet, modern space for study and research, equipped with 
+                         a rich collection of books, digital resources, and comfortable 
+                         reading areas to support every learner's academic journey.</p>
+                </div>
+
+                <div class="facilities-col">
+                    <img src="Images\Lab_Chemical.jpg">
+                    <h3>Chemical Laboratory</h3>
+                    <p>Where science comes alive the Mysk University Chemical Laboratory 
+                        provides a safe, modern space for experiments, innovation, and discovery, 
+                        turning theory into real-world understanding.</p>
+                </div>
+
+                <div class="facilities-col">
+                    <img src="Images\comp lab.jpg">
+                    <h3>Computer Laboratory</h3>
+                    <p>The digital heartbeat of Mysk University, our Computer Lab 
+                        is where innovation takes shape. Here, students code, create, 
+                        and connect ideas that power the future.</p>
+                </div>
+            </div>
+     </section>
+    <!-------Footer----->
+      <section class="footer">
+        <h4>About Us</h4>
+        <p>Mysk University is dedicated to excellence in education, research, and innovation. <br>We provide a supportive learning environment that prepares students for global success.</p>
+        <div class="icons">
+            <i class="fa fa-facebook"></i>
+            <i class="fa fa-twitter"></i>
+            <i class="fa fa-instagram"></i>
+            <i class="fa fa-linkedin"></i>
+        </div>
+      </section>
+
+     <!-------JavaScript for toogle menu------>
+     <script>
+        var navLinks = document.getElementById("navLinks");
+        function showMenu(){
+            navLinks.style.right = "0";
+        }
+        function hideMenu(){
+            navLinks.style.right = "-200px";
+        }
+     </script>
+</body>
+</html>
